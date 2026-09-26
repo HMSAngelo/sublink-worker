@@ -1,6 +1,7 @@
 /** @jsxRuntime automatic */
 /** @jsxImportSource hono/jsx */
 import { Hono } from 'hono';
+import { cors } from 'hono/cors';
 import { Layout } from '../components/Layout.jsx';
 import { Navbar } from '../components/Navbar.jsx';
 import { Form } from '../components/Form.jsx';
@@ -28,6 +29,12 @@ export function createApp(bindings = {}) {
     };
 
     const app = new Hono();
+    
+    app.use('*', cors());
+
+app.get('/version', (c) => {
+    return c.json({ Version: 1, version: '1.0.0', status: 'ok' });
+});
 
     app.use('*', async (c, next) => {
         const acceptLanguage = getRequestHeader(c.req, 'Accept-Language');
